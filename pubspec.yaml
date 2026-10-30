@@ -1,0 +1,45 @@
+name: telecaller_app
+description: "Tegh Telecaller — outstanding collections and calling for Tegh Cables India."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State management + DI. AsyncNotifier is the ViewModel layer of our MVVM.
+  flutter_riverpod: ^2.6.1
+
+  # Declarative routing. StatefulShellRoute keeps each bottom-nav tab's state.
+  go_router: ^14.6.2
+
+  # Rupee and date formatting, to match the web CRM's inr() helper.
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Roboto, declared under its own name. Demandium ships these same TTFs under
+  # the family name "Ubuntu" while every style asks for "Roboto", so its font
+  # silently never loads.
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/font/Roboto-Light.ttf
+          weight: 300
+        - asset: assets/font/Roboto-Regular.ttf
+          weight: 400
+        - asset: assets/font/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/font/Roboto-Bold.ttf
+          weight: 700

@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+
+import '../../../../app/theme/dimensions.dart';
+import '../../../../app/theme/gaps.dart';
+import '../../../../app/theme/styles.dart';
+
+/// Demandium's `AddressAppBar`, re-pointed at what a telecaller is scoped to.
+/// Where that app shows the delivery address under a pin, this shows the
+/// region and city the account is assigned to -- same filled primary bar,
+/// same white-on-indigo treatment.
+class ScopeAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const ScopeAppBar({
+    required this.region,
+    required this.city,
+    required this.notificationCount,
+    super.key,
+  });
+
+  final String region;
+  final String city;
+  final int notificationCount;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(Dimensions.customAppbarSize);
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
+    return AppBar(
+      backgroundColor: theme.primaryColor,
+      elevation: 0,
+      toolbarHeight: Dimensions.customAppbarSize,
+      leadingWidth: 0,
+      leading: const SizedBox(),
+      shape: Border(
+        bottom: BorderSide(
+          width: 0.4,
+          color: theme.primaryColorLight.withValues(alpha: 0.2),
+        ),
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Calling in',
+            style: robotoRegular.copyWith(
+              color: Colors.white,
+              fontSize: Dimensions.fontSizeSmall,
+            ),
+          ),
+          Gaps.vTine,
+          Row(
+            children: [
+              const Icon(
+                Icons.location_on,
+                color: Colors.white,
+                size: Dimensions.paddingSizeDefault,
+              ),
+              Gaps.hTine,
+              Flexible(
+                child: Text(
+                  '$region, $city',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: robotoMedium.copyWith(
+                    color: Colors.white,
+                    fontSize: Dimensions.fontSizeSmall,
+                  ),
+                ),
+              ),
+              Gaps.hTine,
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.white,
+                size: 12,
+              ),
+            ],
+          ),
+        ],
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
+          child: Badge(
+            isLabelVisible: notificationCount > 0,
+            label: Text('$notificationCount'),
+            backgroundColor: theme.colorScheme.secondary,
+            child: const Icon(
+              Icons.notifications,
+              size: 25,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
