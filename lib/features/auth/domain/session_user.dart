@@ -20,6 +20,7 @@ class SessionUser {
     this.region,
     this.regionLabel,
     this.city,
+    this.cities = const <String>[],
   });
 
   factory SessionUser.fromJson(Map<String, dynamic> json) {
@@ -36,6 +37,17 @@ class SessionUser {
       region: json['region'] as String?,
       regionLabel: json['region_label'] as String?,
       city: json['city'] as String?,
+      cities: switch (json['cities']) {
+        final List<dynamic> list => list
+            .map((city) => '$city'.trim())
+            .where((city) => city.isNotEmpty)
+            .toList(),
+        // Older servers send only the single `city`.
+        _ => <String>[
+            if (json['city'] is String && (json['city'] as String).isNotEmpty)
+              json['city'] as String,
+          ],
+      },
     );
   }
 
@@ -55,22 +67,33 @@ class SessionUser {
   final String? regionLabel;
   final String? city;
 
+  /// Every town this account covers. **Empty means all cities in the region**,
+  /// not none — the same convention the server scopes by.
+  final List<String> cities;
+
   bool get isAdmin => role == 'admin';
 
   /// What the home app bar prints under the name. Falls back through the
   /// scope fields so an unscoped admin still sees something meaningful.
+  ///
+  /// Several cities are summarised rather than listed: "Mumbai, 3 cities"
+  /// fits a bar that "Mumbai, Bhiwandi, Thane, Kalyan" does not.
   String get scopeLabel {
     final String region = regionLabel ?? this.region ?? '';
-    final String city = this.city ?? '';
+    final String places = switch (cities.length) {
+      0 => '',
+      1 => cities.first,
+      _ => '${cities.length} cities',
+    };
 
-    if (region.isNotEmpty && city.isNotEmpty) {
-      return '$region, $city';
+    if (region.isNotEmpty && places.isNotEmpty) {
+      return '$region, $places';
     }
     if (region.isNotEmpty) {
       return region;
     }
-    if (city.isNotEmpty) {
-      return city;
+    if (places.isNotEmpty) {
+      return places;
     }
     return 'All regions';
   }

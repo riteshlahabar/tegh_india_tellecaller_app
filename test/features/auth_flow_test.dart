@@ -278,6 +278,56 @@ void main() {
       expect(user.scopeLabel, 'All regions');
     });
 
+    test('several cities are summarised, not listed', () {
+      final user = SessionUser.fromJson(const {
+        'id': 2,
+        'name': 'Aakanksha',
+        'region': 'mumbai',
+        'region_label': 'Mumbai',
+        'cities': ['Bhiwandi', 'Thane', 'Kalyan'],
+      });
+
+      // "Mumbai, Bhiwandi, Thane, Kalyan" does not fit the app bar.
+      expect(user.cities, hasLength(3));
+      expect(user.scopeLabel, 'Mumbai, 3 cities');
+    });
+
+    test('one city is named', () {
+      final user = SessionUser.fromJson(const {
+        'id': 2,
+        'name': 'Aakanksha',
+        'region_label': 'Mumbai',
+        'cities': ['Bhiwandi'],
+      });
+
+      expect(user.scopeLabel, 'Mumbai, Bhiwandi');
+    });
+
+    test('an empty city list means the whole region', () {
+      final user = SessionUser.fromJson(const {
+        'id': 2,
+        'name': 'Aakanksha',
+        'region_label': 'Mumbai',
+        'cities': <String>[],
+      });
+
+      // Empty is "all cities in Mumbai", never "no cities".
+      expect(user.cities, isEmpty);
+      expect(user.scopeLabel, 'Mumbai');
+    });
+
+    test('an older server sending only `city` still works', () {
+      final user = SessionUser.fromJson(const {
+        'id': 2,
+        'name': 'Aakanksha',
+        'region_label': 'Mumbai',
+        'city': 'Bhiwandi',
+      });
+
+      expect(user.cities, ['Bhiwandi']);
+      expect(user.scopeLabel, 'Mumbai, Bhiwandi');
+    });
+
     test('a region with no city falls back to the region alone', () {
       final user = SessionUser.fromJson(const {
         'id': 3,

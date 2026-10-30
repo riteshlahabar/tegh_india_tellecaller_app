@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/session_view_model.dart';
 import '../../features/auth/presentation/splash_screen.dart';
+import '../../features/customers/presentation/customer_detail_screen.dart';
+import '../../features/customers/presentation/customers_screen.dart';
+import '../../features/history/presentation/history_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/invoice/presentation/invoice_detail_screen.dart';
 import '../../features/outstanding/presentation/outstanding_screen.dart';
 import '../../features/shell/presentation/app_shell.dart';
-import '../../shared/widgets/coming_soon_screen.dart';
 
 /// Route paths in one place so no widget writes a literal URL.
 abstract final class Routes {
@@ -23,8 +25,11 @@ abstract final class Routes {
   /// Pushed over the shell, so the bottom bar is hidden while a single
   /// invoice is being worked.
   static const String invoice = '/invoice/:id';
+  static const String customer = '/customer/:id';
 
   static String invoiceOf(int id) => '/invoice/$id';
+
+  static String customerOf(int id) => '/customer/$id';
 }
 
 final GlobalKey<NavigatorState> _rootKey = GlobalKey<NavigatorState>();
@@ -79,6 +84,12 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((ref) {
           invoiceId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
         ),
       ),
+      GoRoute(
+        path: Routes.customer,
+        builder: (context, state) => CustomerDetailScreen(
+          partyId: int.tryParse(state.pathParameters['id'] ?? '') ?? 0,
+        ),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(shell: shell),
         branches: [
@@ -102,13 +113,7 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: Routes.customers,
-                builder: (context, state) => const ComingSoonScreen(
-                  title: 'Customers',
-                  subtitle: 'Party directory',
-                  icon: Icons.business_rounded,
-                  phase: 'Search by name or ERP code, then every invoice and '
-                      'call for that account.',
-                ),
+                builder: (context, state) => const CustomersScreen(),
               ),
             ],
           ),
@@ -116,12 +121,7 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: Routes.history,
-                builder: (context, state) => const ComingSoonScreen(
-                  title: 'History',
-                  subtitle: 'Your call log',
-                  icon: Icons.history_rounded,
-                  phase: 'Today, this week and all, filtered by outcome.',
-                ),
+                builder: (context, state) => const HistoryScreen(),
               ),
             ],
           ),

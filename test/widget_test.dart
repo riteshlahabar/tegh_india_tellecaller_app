@@ -41,6 +41,7 @@ void main() {
     await tester.tap(find.text('Customers'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Party directory'), findsOneWidget);
+    // The real directory, not the placeholder it replaced.
+    expect(find.text('Search name, code or mobile'), findsOneWidget);
   });
 }

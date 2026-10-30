@@ -6,11 +6,17 @@ import 'package:telecaller_app/core/providers.dart';
 import 'package:telecaller_app/features/auth/domain/auth_repository.dart';
 import 'package:telecaller_app/features/auth/domain/session_user.dart';
 import 'package:telecaller_app/features/auth/presentation/session_view_model.dart';
+import 'package:telecaller_app/features/history/domain/history_repository.dart';
+import 'package:telecaller_app/features/history/presentation/history_view_model.dart';
 import 'package:telecaller_app/features/home/domain/home_repository.dart';
 import 'package:telecaller_app/features/home/presentation/home_view_model.dart';
+import 'package:telecaller_app/features/customers/domain/customers_repository.dart';
+import 'package:telecaller_app/features/customers/presentation/customers_view_model.dart';
 import 'package:telecaller_app/features/outstanding/domain/outstanding_repository.dart';
 import 'package:telecaller_app/features/outstanding/presentation/outstanding_view_model.dart';
 
+import 'fake_customers_repository.dart';
+import 'fake_history_repository.dart';
 import 'fake_home_repository.dart';
 import 'fake_outstanding_repository.dart';
 
@@ -27,6 +33,7 @@ const SessionUser kTestUser = SessionUser(
   region: 'mumbai',
   regionLabel: 'Mumbai',
   city: 'Bhiwandi',
+  cities: <String>['Bhiwandi'],
 );
 
 /// Scriptable [AuthRepository]: no network, no token store.
@@ -72,6 +79,8 @@ Future<void> pumpApp(
   AuthRepository? auth,
   HomeRepository? home,
   OutstandingRepository? outstanding,
+  CustomersRepository? customers,
+  HistoryRepository? history,
   Map<String, Object> prefs = const {},
 }) async {
   SharedPreferences.setMockInitialValues(prefs);
@@ -91,6 +100,12 @@ Future<void> pumpApp(
         ),
         outstandingRepositoryProvider.overrideWithValue(
           outstanding ?? FakeOutstandingRepository(),
+        ),
+        customersRepositoryProvider.overrideWithValue(
+          customers ?? FakeCustomersRepository(),
+        ),
+        historyRepositoryProvider.overrideWithValue(
+          history ?? FakeHistoryRepository(),
         ),
       ],
       child: const TeghApp(),

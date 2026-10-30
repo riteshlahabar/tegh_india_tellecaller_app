@@ -19,7 +19,13 @@ abstract final class DashboardMapper {
     return HomeSummary(
       callerName: user.name,
       region: user.regionLabel ?? user.region ?? 'All regions',
-      city: user.city ?? 'All cities',
+      // Empty means every city in the region, and several are summarised:
+      // the app bar has room for "3 cities", not for four town names.
+      city: switch (user.cities.length) {
+        0 => 'All cities',
+        1 => user.cities.first,
+        _ => '${user.cities.length} cities',
+      },
       totalOutstanding: _double(kpis['total_outstanding']),
       overdueAmount: _double(kpis['overdue']),
       dueTodayAmount: _double(kpis['due_today']),
