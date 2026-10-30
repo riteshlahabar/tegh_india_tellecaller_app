@@ -30,7 +30,10 @@ abstract final class AppTheme {
                 onPrimary: Color(0xFFF8FAFC),
               )
             : const ColorScheme.dark(
-                primary: Color(0xFF8C9BE8),
+                // The brand tint already reads well on a dark ground, so dark
+                // mode uses it directly and puts dark text back on top.
+                primary: AppPalette.primary,
+                onPrimary: Color(0xFFF8FAFC),
                 secondary: AppPalette.secondary,
                 tertiary: AppPalette.tertiary,
                 error: AppPalette.overdue,

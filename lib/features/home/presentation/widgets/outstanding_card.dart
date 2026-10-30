@@ -29,6 +29,7 @@ class OutstandingCard extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
+            // Not : white text needs the deeper end of the hue.
             colors: [AppPalette.primary, AppPalette.primaryDark],
           ),
         ),

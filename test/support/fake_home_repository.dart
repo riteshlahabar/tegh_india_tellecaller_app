@@ -1,19 +1,14 @@
-import '../domain/home_repository.dart';
-import '../domain/home_summary.dart';
+import 'package:telecaller_app/features/home/domain/home_repository.dart';
+import 'package:telecaller_app/features/home/domain/home_summary.dart';
 
-/// Placeholder data so the UI can be reviewed before the `/api/queue`
-/// endpoint exists. Figures are the real live totals from the CRM; party
-/// names are real accounts out of the three companies' books.
-///
-/// Delete this class once `HttpHomeRepository` lands — nothing but the
-/// provider override in `home_view_model.dart` refers to it.
-class SampleHomeRepository implements HomeRepository {
-  const SampleHomeRepository();
+/// Fixed home data for widget tests, so they assert on layout rather than on
+/// whatever the live CRM happens to hold. Figures were the real live totals;
+/// party names are real accounts out of the three companies' books.
+class FakeHomeRepository implements HomeRepository {
+  const FakeHomeRepository();
 
   @override
   Future<HomeSummary> loadSummary() async {
-    await Future<void>.delayed(const Duration(milliseconds: 450));
-
     return const HomeSummary(
       callerName: 'Aakanksha',
       region: 'Mumbai',

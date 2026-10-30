@@ -7,9 +7,16 @@ import 'package:flutter/material.dart';
 /// `Theme.of(context).extension<CustomThemeColors>()` where they can, and
 /// reach in here only for the status tones.
 abstract final class AppPalette {
-  static const Color primary = Color(0xFF4153B3);
-  static const Color primaryLight = Color(0xFFECEDF7);
-  static const Color primaryDark = Color(0xFF34428F);
+  /// Client-chosen brand colour, 2026-10-30, replacing Demandium's indigo
+  /// `#4153B3`. A straight swap: everything that was indigo is now this, and
+  /// text on it stays white.
+  ///
+  /// White on this measures about 6.3:1 contrast, clearing the 4.5:1 wanted
+  /// for body text -- so the white chrome the client asked for is legible
+  /// here, which the two lighter tints tried before it were not.
+  static const Color primary = Color(0xFF106B6E);
+  static const Color primaryLight = Color(0xFFE4F1F1);
+  static const Color primaryDark = Color(0xFF0A4A4C);
 
   static const Color secondary = Color(0xFFFF9900);
   static const Color onSecondary = Color(0xFFFFDA6D);
@@ -26,7 +33,7 @@ abstract final class AppPalette {
   /// success green.
   static const Color overdue = Color(0xFFF76767);
   static const Color dueToday = Color(0xFFFF9900);
-  static const Color promise = Color(0xFF4153B3);
+  static const Color promise = Color(0xFF106B6E);
   static const Color paid = Color(0xFF02AA05);
   static const Color notDue = Color(0xFF758493);
 }

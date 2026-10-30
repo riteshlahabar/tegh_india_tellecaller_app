@@ -1,13 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/sample_home_repository.dart';
+import '../../../core/providers.dart';
+import '../../auth/presentation/session_view_model.dart';
+import '../data/http_home_repository.dart';
 import '../domain/home_repository.dart';
 import '../domain/home_summary.dart';
 
-/// Injection point. Phase 2 overrides this with the HTTP implementation and
-/// nothing else in the feature changes.
+/// Injection point. This is the only line that names an implementation --
+/// swapping the sample data for the live API changed nothing in the view or
+/// the view-model, which is what the repository interface was for.
 final homeRepositoryProvider = Provider<HomeRepository>(
-  (ref) => const SampleHomeRepository(),
+  (ref) => HttpHomeRepository(
+    client: ref.watch(apiClientProvider),
+    user: ref.watch(currentUserProvider),
+  ),
 );
 
 /// The home screen's ViewModel. Holds no widgets and no HTTP; it owns the

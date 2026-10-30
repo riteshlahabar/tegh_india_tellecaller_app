@@ -30,9 +30,11 @@ class AppBottomNav extends StatelessWidget {
     final EdgeInsets padding = MediaQuery.paddingOf(context);
 
     return Container(
+      // Demandium pads this by paddingSizeDefault top and bottom. Halved:
+      // the bar was eating screen a dial queue needs for rows.
       padding: EdgeInsets.only(
-        top: Dimensions.paddingSizeDefault,
-        bottom: padding.bottom > 15 ? 0 : Dimensions.paddingSizeDefault,
+        top: Dimensions.paddingSizeEight,
+        bottom: padding.bottom > 15 ? 0 : Dimensions.paddingSizeEight,
       ),
       color: theme.primaryColor,
       child: SafeArea(
@@ -69,8 +71,8 @@ class _DockGap extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(width: 20, height: 20),
-          Gaps.vExtraSmall,
+          SizedBox(width: 20, height: 18),
+          Gaps.vTine,
           Text(''),
         ],
       ),
@@ -101,14 +103,15 @@ class _BnbItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(selected ? tab.selectedIcon : tab.icon, size: 18, color: tone),
-            Gaps.vExtraSmall,
+            Gaps.vTine,
             Text(
               tab.label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: robotoRegular.copyWith(
-                fontSize: Dimensions.fontSizeSmall,
+                fontSize: Dimensions.fontSizeExtraSmall,
                 color: tone,
+                height: 1.1,
               ),
             ),
           ],

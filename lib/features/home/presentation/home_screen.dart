@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:go_router/go_router.dart';
+
+import '../../../app/router/app_router.dart';
 import '../../../app/theme/dimensions.dart';
 import '../../../app/theme/gaps.dart';
 import '../../../app/theme/styles.dart';
+import '../../../core/platform/dialer.dart';
 import '../../../shared/widgets/title_widget.dart';
+import '../../auth/presentation/session_view_model.dart';
 import '../domain/home_summary.dart';
 import 'home_view_model.dart';
 import 'widgets/outstanding_card.dart';
@@ -37,9 +42,11 @@ class HomeScreen extends ConsumerWidget {
       ),
       data: (summary) => Scaffold(
         appBar: ScopeAppBar(
+          callerName: summary.callerName,
           region: summary.region,
           city: summary.city,
           notificationCount: summary.overdueCount,
+          onSignOut: () => _confirmSignOut(context, ref),
         ),
         body: SafeArea(
           top: false,
@@ -50,6 +57,33 @@ class HomeScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+/// Signing out drops the token, so it is confirmed rather than one stray tap
+/// next to the notification bell.
+Future<void> _confirmSignOut(BuildContext context, WidgetRef ref) async {
+  final bool? yes = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Sign out?'),
+      content: const Text('You will need your password to sign back in.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Sign out'),
+        ),
+      ],
+    ),
+  );
+
+  if (yes ?? false) {
+    // The router's redirect takes it from here.
+    await ref.read(sessionProvider.notifier).signOut();
   }
 }
 
@@ -87,8 +121,8 @@ class _HomeBody extends StatelessWidget {
         Gaps.vSmall,
         PriorityCallList(
           calls: summary.priorityCalls,
-          onCall: (_) {},
-          onTap: (_) {},
+          onCall: (call) => Dialer.call(call.mobile ?? ''),
+          onTap: (call) => context.push(Routes.invoiceOf(call.invoiceId)),
         ),
       ],
     );

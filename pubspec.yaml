@@ -20,6 +20,9 @@ dependencies:
 
   # Rupee and date formatting, to match the web CRM's inr() helper.
   intl: ^0.20.2
+  http: ^1.6.0
+  shared_preferences: ^2.5.6
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:

@@ -10,15 +10,19 @@ import '../../../../app/theme/styles.dart';
 /// same white-on-indigo treatment.
 class ScopeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ScopeAppBar({
+    required this.callerName,
     required this.region,
     required this.city,
     required this.notificationCount,
+    required this.onSignOut,
     super.key,
   });
 
+  final String callerName;
   final String region;
   final String city;
   final int notificationCount;
+  final VoidCallback onSignOut;
 
   @override
   Size get preferredSize => const Size.fromHeight(Dimensions.customAppbarSize);
@@ -44,10 +48,12 @@ class ScopeAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Calling in',
-            style: robotoRegular.copyWith(
+            callerName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: robotoSemiBold.copyWith(
               color: Colors.white,
-              fontSize: Dimensions.fontSizeSmall,
+              fontSize: Dimensions.fontSizeDefault,
             ),
           ),
           Gaps.vTine,
@@ -70,30 +76,31 @@ class ScopeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-              Gaps.hTine,
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Colors.white,
-                size: 12,
-              ),
             ],
           ),
         ],
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
-          child: Badge(
-            isLabelVisible: notificationCount > 0,
-            label: Text('$notificationCount'),
-            backgroundColor: theme.colorScheme.secondary,
-            child: const Icon(
-              Icons.notifications,
-              size: 25,
-              color: Colors.white,
-            ),
+        Badge(
+          isLabelVisible: notificationCount > 0,
+          label: Text('$notificationCount'),
+          backgroundColor: theme.colorScheme.secondary,
+          child: const Icon(
+            Icons.notifications,
+            size: 25,
+            color: Colors.white,
           ),
         ),
+        IconButton(
+          tooltip: 'Sign out',
+          onPressed: onSignOut,
+          icon: const Icon(
+            Icons.logout_rounded,
+            size: Dimensions.iconSizeDefault,
+            color: Colors.white,
+          ),
+        ),
+        Gaps.hExtraSmall,
       ],
     );
   }
